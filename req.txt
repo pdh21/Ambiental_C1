@@ -1,0 +1,10 @@
+osgeo
+gdal
+glob
+pyshp
+scipy
+shapely
+pandas
+geopandas
+numpy
+scikit-learn
