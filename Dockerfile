@@ -2,12 +2,9 @@ FROM continuumio/miniconda3
 
 LABEL maintainer "peter@datajavelin.com"
 
-# Set the working directory to /app
-WORKDIR /app
+RUN conda update conda && git clone https://github.com/pdh21/Ambiental_C1.git
 
-RUN git clone https://github.com/pdh21/Ambiental_C1.git && cd Ambiental_C1 && pip install -e './'
+WORKDIR Ambiental_C1
+RUN conda install -c conda-forge gdal && conda install -c conda-forge geopandas && pip install -e './'
 
-EXPOSE 90
-
-
-CMD["python", find_errors"]
+ENTRYPOINT ["python","find_errors.py"]
