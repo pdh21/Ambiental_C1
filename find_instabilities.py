@@ -79,6 +79,9 @@ data = {'Domain': mapfile.split('/')[-1] * coords.shape[0],
               'lon': xpix[coords[:,1]]}
 df=pd.DataFrame(data)
 
-geometry = [Point(xy) for xy in zip(df['lon'], df['lat'])]
-gdf = GeoDataFrame(df, geometry=geometry)
-gdf.to_file(filename=output)
+if len(df)>0:
+    geometry = [Point(xy) for xy in zip(df['lon'], df['lat'])]
+    gdf = GeoDataFrame(df, geometry=geometry)
+    gdf.to_file(filename=output)
+else:
+    print('No instabilities in ',mapfile)
