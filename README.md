@@ -79,3 +79,31 @@ For example:
 
 ## Identification of unstable simulations
 Initial data analysis is in [Instabilities.ipynb](Instabilities.ipynb)
+
+### Solution
+The solution works by carrying out a fourier transform of the floodmap image, 
+and filtering the frequencies such that only the low frequency parts of the image, that correspond to the spatial scale
+of the instabilities. The filtered image is then run through a peak detection algorithm
+so that the position of the instabilities can be saved as a shapefile. 
+
+
+#### Docker Image
+
+To install docker [see here for information](https://docs.docker.com/install/). To run the docker image, run the 
+following command:
+
+`docker run -v /absolute/path/to/folder/with/map/:/map \
+    -v /absolute/path/to/output/folder/:/output \
+    datajavelin/ambiental_inst:v0.1 
+    --map='/map/map_file.tif' --output '/output/problem_domains'
+`
+The `-v` commands attaches the local folders to the docker container.
+
+For example:
+`docker run \
+-v /Users/pdh21/Work/Ambiental/Ambiental_C1/data/Ambiental_DataJavelin_FloodMap_QA/Instabilities/SEV_Sim_Outputs_TIFF/109yr/:/map/ \
+-v /Users/pdh21/Work/Ambiental/Ambiental_C1/:/output/ \
+datajavelin/ambiental_inst:v0.1 \
+ --map '/map/SEV1_925_1_109yr.tif' --output '/output/inst_test'`
+ `
+> Note: The default memory allocation for docker containers may not be enough. Ideally set to 6GB or above
