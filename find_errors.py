@@ -26,17 +26,17 @@ if __name__ == '__main__':
    parser.add_argument('--ngroup')
    parser.add_argument('--output')
    args = parser.parse_args()
-   map=args.map
+   mapfile=args.map
    domain_direc=args.domains
    eps=args.dist
    ngroup=args.ngroup
    output=args.output
 
-   print('floodmap set as: ',map)
+   print('floodmap set as: ',mapfile)
    print('directory containing domains: ',domain_direc)
 
 
-floodmap=gdal.Open(map)
+floodmap=gdal.Open(mapfile)
 
 arr = floodmap.ReadAsArray()
 geo_transform = floodmap.GetGeoTransform()
