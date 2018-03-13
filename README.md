@@ -86,6 +86,26 @@ and filtering the frequencies such that only the low frequency parts of the imag
 of the instabilities. The filtered image is then run through a peak detection algorithm
 so that the position of the instabilities can be saved as a shapefile. 
 
+#### Python Package 
+ Code is packaged up as a python installation (python 3). Install with the command:
+ 
+`pip install -e './' `
+
+
+This should install all required modules
+
+To find the errors, you can run `find_instabilities.py`.This requires two arguments:
+
+##### Arguments:
+
+`--map`: the flood simulation file (a tif file)
+
+`--output`: the filename you want for output. The output is a `.shp` file, containing a list of pixels, their positions 
+(in co-ordinate system of map file)
+
+#### Example:
+` python find_instabilities.py --map './data/SEV_Sim_Outputs_TIFF/109yr/SEV1_4000_1_109yr.tif' --output './test'`
+
 
 #### Docker Image
 

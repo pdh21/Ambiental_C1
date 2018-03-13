@@ -9,6 +9,6 @@ setup(name='Ambiental_C1',
       packages=['domains','./'],
       license='MIT',
       install_requires=['gdal','pyshp', 'scipy', 'shapely', 'pandas', 'geopandas', 'numpy',
-                        'scikit-learn'],
+                        'scikit-learn', 'scikit-image'],
       zip_safe=False
       )
