@@ -1,4 +1,6 @@
 import argparse
+import glob
+
 import numpy as np
 import gdal
 from shapely.geometry import Point
@@ -45,43 +47,52 @@ if __name__ == '__main__':
     parser.add_argument('--output')
     args = parser.parse_args()
 
-    mapfile=args.map
+    mapdir=args.map
     output=args.output
 
-    print('floodmap set as: ',mapfile)
-floodmap=gdal.Open(mapfile)
-arr = floodmap.ReadAsArray()
-arr[arr < 0] = 0.0
+print('directory containing floodmaps: ',mapdir)
 
-F2=fft_map(arr)
-filt_im=filter_fft(F2)
-coords=peak_finder(filt_im,3,1.25)
+sfiles=glob.glob(mapdir+'/*.tif')
+df = []
 
-geo_transform = floodmap.GetGeoTransform()
-origin_x = geo_transform[0]
-origin_y = geo_transform[3]
-pixel_width = geo_transform[1]
-pixel_height = geo_transform[5]
-n_cols = floodmap.RasterXSize
-n_rows = floodmap.RasterYSize
+for ii, m in enumerate(sfiles):
 
-extent_lonlat = (
+    floodmap=gdal.Open(m)
+    arr = floodmap.ReadAsArray()
+    arr[arr < 0] = 0.0
+
+    F2=fft_map(arr)
+    filt_im=filter_fft(F2)
+    coords=peak_finder(filt_im,3,1.25)
+
+    geo_transform = floodmap.GetGeoTransform()
+    origin_x = geo_transform[0]
+    origin_y = geo_transform[3]
+    pixel_width = geo_transform[1]
+    pixel_height = geo_transform[5]
+    n_cols = floodmap.RasterXSize
+    n_rows = floodmap.RasterYSize
+
+    extent_lonlat = (
     origin_x,
     origin_x + (pixel_width * floodmap.RasterXSize),
     origin_y + (pixel_height * floodmap.RasterYSize),
     origin_y
-)
-xpix = np.arange(extent_lonlat[0], extent_lonlat[1], pixel_width)
-ypix = np.arange(extent_lonlat[3], extent_lonlat[2], pixel_height)
+    )
+    xpix = np.arange(extent_lonlat[0], extent_lonlat[1], pixel_width)
+    ypix = np.arange(extent_lonlat[3], extent_lonlat[2], pixel_height)
 
-data = {'Domain': mapfile.split('/')[-1] * coords.shape[0],
-              'lat':ypix[coords[:,0]] ,
-              'lon': xpix[coords[:,1]]}
-df=pd.DataFrame(data)
+    data = {'mapfile': m.split('/')[-1],
+                 'lat':ypix[coords[:,0]] ,
+                'lon': xpix[coords[:,1]]}
 
-if len(df)>0:
-    geometry = [Point(xy) for xy in zip(df['lon'], df['lat'])]
-    gdf = GeoDataFrame(df, geometry=geometry)
-    gdf.to_file(filename=output)
-else:
-    print('No instabilities in ',mapfile)
+    df.append(pd.DataFrame(data))
+
+
+    if ((ii % 100) == 0):
+        print('Completed ', ii,' / ', len(sfiles))
+
+alldf = pd.concat(df)
+geometry = [Point(xy) for xy in zip(alldf['lon'], alldf['lat'])]
+gdf = GeoDataFrame(alldf, geometry=geometry)
+gdf.to_file(filename=output)

@@ -132,7 +132,7 @@ for ii, s in enumerate(sfiles):
       db = DBSCAN(eps=eps * 5, min_samples=ngroup).fit(points[ind, 1:3])
       labels = db.labels_
       ind_keep = labels >= 0
-      data = {'Domain': s.split('/')[-1] * ind_keep.sum(),
+      data = {'Domain': s.split('/')[-1],
               'lat': points[ind, 2][ind_keep],
               'lon': points[ind, 1][ind_keep], 'group': labels[ind_keep]}
 
