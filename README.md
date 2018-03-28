@@ -56,7 +56,7 @@ following command:
 `docker run -v /absolute/path/to/folder/with/map/:/map \
     -v /absolute/path/to/folder/with/domains/:/domains \
     -v /absolute/path/to/output/folder/:/output \
-    datajavelin/ambiental_c1:v0.1 
+    datajavelin/ambiental_c1:v0.2 
     --map='/map/map_file.tif' 
     --domains '/domains/' 
     --output '/output/problem_domains'
@@ -68,7 +68,7 @@ For example:
 `docker run -v /Users/pdh21/Ambiental_DataJavelin_FloodMap_QA/Domain_Errors/Examples/CombinedOutput_FloodMap/:/map \
  -v /Users/pdh21/Ambiental_DataJavelin_FloodMap_QA/Domain_Errors/Examples/Problematic_Domains/:/domains \
  -v /Users/pdh21/output/:/output \
- datajavelin/ambiental_c1:v0.1 --map '/map/SEV_Fluvial_100yr.tif' \
+ datajavelin/ambiental_c1:v0.2 --map '/map/SEV_Fluvial_100yr.tif' \
  --domains '/domains/' \
  --output '/output/test' \
  --ngroup '10'
@@ -98,13 +98,13 @@ To find the errors, you can run `find_instabilities.py`.This requires two argume
 
 ##### Arguments:
 
-`--map`: the flood simulation file (a tif file)
+`--map`: directory containing flood simulation files (tif files)
 
 `--output`: the filename you want for output. The output is a `.shp` file, containing a list of pixels, their positions 
-(in co-ordinate system of map file)
+(in co-ordinate system of map files)
 
 #### Example:
-` python find_instabilities.py --map './data/SEV_Sim_Outputs_TIFF/109yr/SEV1_4000_1_109yr.tif' --output './test'`
+` python find_instabilities.py --map './data/SEV_Sim_Outputs_TIFF/109yr/' --output './test'`
 
 
 #### Docker Image
@@ -123,7 +123,7 @@ For example:
 `docker run \
 -v /Users/pdh21/Work/Ambiental/Ambiental_C1/data/Ambiental_DataJavelin_FloodMap_QA/Instabilities/SEV_Sim_Outputs_TIFF/109yr/:/map/ \
 -v /Users/pdh21/Work/Ambiental/Ambiental_C1/:/output/ \
-datajavelin/ambiental_inst:v0.1 \
- --map '/map/SEV1_925_1_109yr.tif' --output '/output/inst_test'`
+datajavelin/ambiental_inst:v0.2 \
+ --map '/map/' --output '/output/inst_test'`
  `
 > Note: The default memory allocation for docker containers may not be enough. Ideally set to 6GB or above
